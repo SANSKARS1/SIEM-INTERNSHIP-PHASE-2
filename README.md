@@ -9,8 +9,8 @@ It includes realistic attacker emulation using tools such as **LinPEAS**, **Crac
 
 ## 🏗️ Architecture
 
+![mermaid-ai-diagram-2025-05-23-152514](https://github.com/user-attachments/assets/678abed8-b117-4735-9364-d7b530aadf61)
 
-![mermaid-ai-diagram-2025-05-16-100656](https://github.com/user-attachments/assets/f45da94b-ff63-481b-984f-d92bd78992b5)
 
 The simulation covers attacker actions such as privilege escalation, lateral movement, credential dumping, C2 communication, and more, with real-time monitoring and alerting via Splunk.
 
