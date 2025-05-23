@@ -1,0 +1,7 @@
+"_time",host,"source_user","target_user","src_ip","event_type",args,command
+"2025-05-22T15:42:07.075+0530",kali,,,,"file_transfer",,
+"2025-05-22T15:42:07.062+0530",kali,,,,"file_transfer",,
+"2025-05-22T15:42:07.051+0530",kali,,,,"file_transfer",,
+"2025-05-22T15:42:06.924+0530",kali,,kali,"192.168.1.11","ssh_login",,
+"2025-05-22T15:42:05.515+0530",kali,,,,"file_transfer",,
+"2025-05-22T15:42:05.508+0530",kali,,,,"file_transfer","cleaned_id.key",scp
