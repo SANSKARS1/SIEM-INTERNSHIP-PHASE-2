@@ -1,90 +1,139 @@
-# SIEM-INTERNSHIP-PHASE-1
-Threat Detection Environment through SIEM.
+# SIEM-INTERNSHIP-PHASE-2
+Advanced Threat Detection & Post-Exploitation Simulation on Linux
 
 ## 📌 Overview
 
-This repository demonstrates the detection of common adversarial behaviors on a Linux system using **Splunk Enterprise** and **Splunk Universal Forwarder**. Logs are collected from Linux systems and ingested into Splunk for real-time analysis and alerting.
+This repository presents the second phase of the SIEM internship, focusing on detecting post-exploitation attacker behavior using **Splunk Enterprise**. The setup simulates real-world adversarial techniques and analyzes them through log data collected from Linux systems using **Splunk Universal Forwarder**.
+
+It includes realistic attacker emulation using tools such as **LinPEAS**, **CrackMapExec**, **Metasploit**, and **LaZagne** to simulate exploitation, lateral movement, and credential access.
 
 ## 🏗️ Architecture
 
+![mermaid-ai-diagram-2025-05-23](https://github.com/user-attachments/assets/phase2/diagram-postexploitation-linux)
 
-![mermaid-ai-diagram-2025-05-16-100656](https://github.com/user-attachments/assets/f45da94b-ff63-481b-984f-d92bd78992b5)
-
-
-Using Splunk's powerful search and alerting capabilities, the following security scenarios are covered:
-
-### 🔄 Lateral Movement
-
-Lateral movement involves an attacker expanding their access across systems in the network. We monitor for:
-- SSH login from one internal host to another
-- Repeated logins between systems within a short time window
-- Unusual IP-to-IP login patterns
-
-**Log Source**: `/var/log/auth.log`, `/var/log/syslog`
-
-**Detection**: Monitor SSH sessions with internal IPs, detect abnormal pivot behavior.
+The simulation covers attacker actions such as privilege escalation, lateral movement, credential dumping, C2 communication, and more, with real-time monitoring and alerting via Splunk.
 
 ---
 
-### 🧹 Log Tampering
+## 🔓 Exploitation & Post-Exploitation Techniques Simulated
 
-Attackers often attempt to cover their tracks by deleting or modifying log files. We monitor for:
-- Commands like `rm /var/log/*`, `echo > /var/log/auth.log`
-- Suspicious use of `truncate`, `shred`, or `> logfile`
-
-**Log Source**: `.bash_history`, `auditd`, `syslog`
-
-**Detection**: Identify file access/modification patterns to critical log files.
-
----
-
-### 🕒 Suspicious Login After Hours
-
-Detect logins that occur outside of defined working hours (e.g., 9 AM–7 PM). These often indicate unauthorized access attempts.
-
-**Log Source**: `/var/log/auth.log`
-
-**Detection**: Compare login timestamps to a defined working hour schedule and flag outliers.
+- **Privilege Escalation** using `LinPEAS`
+- **Lateral Movement** via `SSH` and tools like `CrackMapExec`
+- **Suspicious File Downloads** using `wget`, `curl`, `ftp`, `scp`
+- **Credential Dumping** via `LaZagne`, and parsing `/etc/passwd` or `/etc/shadow`
+- **Command and Control** using `Metasploit Meterpreter`
+- **Anomalous User Behavior** detection and analysis
 
 ---
 
-### 👤 Unauthorized User Creation
+### 🧍 Privilege Escalation Detection
 
-Adversaries may create new users to maintain access. We monitor for:
-- Use of `useradd`, `adduser`, or modifications in `/etc/passwd`
+Detect when an attacker attempts to elevate privileges or add users to administrative groups:
+- Use of `sudo`, `usermod`, `useradd`, `LinPEAS`, or direct editing of `/etc/passwd`
 
-**Log Source**: `auditd`, `auth.log`, `bash_history`
+**Log Source**: `/var/log/auth.log`, `/etc/passwd`, `/etc/group`, `auditd`
 
-**Detection**: Real-time detection of system user creation or privilege escalation.
-
----
-
-### 🔐 Brute Force Detection
-
-A classic attack where multiple login attempts are made to guess a user's password. We detect:
-- 10+ failed SSH login attempts from the same IP
-- Followed by a successful login within 2 minutes
-
-**Log Source**: `/var/log/auth.log`
-
-**Detection**: Stream-based correlation of login failures and success with `streamstats` in Splunk.
+**Detection**: Monitor privilege modification commands and changes in group memberships.
 
 ---
 
-### 🖥️ Splunk Universal Forwarder + Linux Log Integration
+### 🔄 Lateral Movement via SSH/Remote Copy
 
-To enable these detections, **Splunk Universal Forwarder** is installed on Linux endpoints to collect and forward logs to **Splunk Enterprise**.
+Simulate and detect lateral movement attempts across systems:
+- SSH sessions initiated internally using `ssh`, `scp`, or `CrackMapExec`
+
+**Log Source**: `/var/log/auth.log`, `/var/log/secure`, `audit.log`
+
+**Detection**: Look for internal SSH logins, transfers to uncommon hosts, and usage of remote execution tools.
+
+---
+
+### 🧪 Suspicious File Downloads & Execution
+
+Attackers often download and execute payloads:
+- Download using `wget`, `curl`, `ftp`, `scp`
+- Execute with `bash`, `chmod`, or `./`
+
+**Log Source**: `auditd`, `syslog`, `bash_history`
+
+**Detection**: Correlate file downloads to executions, and flag use of temp directories or uncommon extensions (`.sh`, `.py`, `.elf`).
+
+---
+
+### 🧠 Credential Dumping
+
+Simulate extraction of stored credentials:
+- Access to `/etc/passwd` or `/etc/shadow`
+- Use of tools like `LaZagne` for plaintext credentials
+
+**Log Source**: `auditd`, `syslog`
+
+**Detection**: Identify access to sensitive files and suspicious credential extraction tools.
+
+---
+
+### 🧭 Anomalous User Behavior
+
+Post-compromise behavior varies from normal users:
+- Off-hour logins, burst activity
+- Accessing sensitive directories or copying large files
+
+**Log Source**: `/var/log/auth.log`, `audit.log`, `syslog`
+
+**Detection**: Use behavior analytics to identify anomalies in user actions and patterns.
+
+---
+
+### 📡 Command and Control (C2) Beaconing
+
+Simulated C2 traffic using **Metasploit Meterpreter**:
+- Regular outbound connections (beacons)
+- Periodic use of `curl`, `wget`
+
+**Log Source**: `audit.log`, `syslog`, network logs (if available)
+
+**Detection**: Flag repeated access to external IPs/domains with fixed intervals.
+
+---
+
+### 🗂️ Log Sources for Detection
+
+The following Linux logs are monitored:
+- `/var/log/auth.log`
+- `/var/log/audit/audit.log`
+- `/var/log/syslog`
+- `/home/*/.bash_history`
+- `/etc/passwd`, `/etc/group`, `/etc/shadow`
+
+These are forwarded using the **Splunk Universal Forwarder** to **Splunk Enterprise**.
+
+---
+
+### 🖥️ Splunk Universal Forwarder + Post-Exploitation Integration
+
+To enable detection:
 
 - **Configured log sources**:
   - `/var/log/auth.log`
-  - `/var/log/syslog`
   - `/var/log/audit/audit.log`
+  - `/var/log/syslog`
   - `/home/*/.bash_history`
+  - `/etc/passwd`, `/etc/group`, `/etc/shadow`
+
 - **Forwarder Configuration Files**:
-  - `inputs.conf` – defines which files to monitor
-  - `outputs.conf` – sets Splunk indexer connection (TCP 9997)
-- **Index**: All logs are sent to the `linux_logs` index with relevant sourcetypes (`auth`, `syslog`, `auditd`)
+  - `inputs.conf`: paths to monitor
+  - `outputs.conf`: forwards to indexer (TCP 9997)
+
+- **Index**: Logs indexed under `postexploitation_logs` with sourcetypes such as `auth`, `syslog`, `auditd`, `bash`
 
 ---
 
-These detection techniques align with MITRE ATT&CK tactics such as **Persistence**, **Defense Evasion**, **Lateral Movement**, and **Credential Access**, helping security teams gain real-time visibility into adversary behavior within a Linux environment.
+These detections align with MITRE ATT&CK tactics:
+- **Privilege Escalation**
+- **Lateral Movement**
+- **Credential Access**
+- **Execution**
+- **Command and Control**
+- **Defense Evasion**
+
+This setup enhances visibility into post-compromise activity on Linux endpoints using Splunk as the central detection engine.
