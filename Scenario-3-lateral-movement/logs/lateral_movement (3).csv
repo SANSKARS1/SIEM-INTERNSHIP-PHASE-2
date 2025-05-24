@@ -1,0 +1,4 @@
+"_time",EventID,Image,User,SourceIp,DestinationIp,DestinationPort,ProcessId,"source_type",a0,a1,a2,a3,a4,"full_command",host
+"2025-05-24T18:42:17.304+0530",,,,,,,,"linux_mount_exec",mount,"-t",tmpfs,none,"/mnt/","mount -t tmpfs none /mnt/",kali
+"2025-05-24T18:41:12.684+0530",,,,,,,,"linux_mount_exec",mount,"-t",tmpfs,none,"/mnt/","mount -t tmpfs none /mnt/",kali
+"2025-05-24T18:33:03.941+0530",3,"/usr/bin/ssh",root,"192.168.1.11","192.168.1.11",22,970474,"sysmon_network",,,,,,,
