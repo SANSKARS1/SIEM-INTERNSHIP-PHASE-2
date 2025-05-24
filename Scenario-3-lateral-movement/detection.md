@@ -17,7 +17,7 @@ This detection aims to identify lateral movement activities by monitoring connec
   - Windows host running Splunk Enterprise
   - Monitored Logs: `/var/log/syslog`, Audit logs
   - Data forwarded to Splunk Enterprise over TCP port `9997`
-  - ** *Auditd Rules* **:
+  - **Auditd Rules**:
     ![Screenshot 2025-05-24 175724](https://github.com/user-attachments/assets/16af7078-5b64-49c2-9390-1890038a3858)
 
 ---
