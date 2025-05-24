@@ -1,0 +1,6 @@
+"_time",host,user,cmd,arg1,arg2,"suspicious_download","suspicious_exec","suspicious_path","suspicious_ext"
+"2025-05-24T17:06:05.603+0530",kali,,wget,"http://192.168.1.11:8000/linpeas.sh","/tmp/",wget,,"/tmp",".sh"
+"2025-05-24T17:04:18.575+0530",kali,,chmod,"+x","/tmp/lin.sh",,chmod,"/tmp",
+"2025-05-24T17:03:34.811+0530",kali,,bash,"/tmp/lin.sh",,,bash,,".sh"
+"2025-05-24T17:02:43.251+0530",kali,,chmod,"+x","/tmp/lin.sh",,chmod,"/tmp",
+"2025-05-24T17:02:16.323+0530",kali,,chmod,0640,"/etc/audit/audit.rules",,chmod,,
