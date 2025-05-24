@@ -38,15 +38,24 @@ Detect when an attacker attempts to elevate privileges or add users to administr
 
 ---
 
-### 🔄 Lateral Movement via SSH/Remote Copy
+### 🔄 Lateral Movement Detection (Non-SSH)
 
-Simulate and detect lateral movement attempts across systems:
-- SSH sessions initiated internally using `ssh`, `scp`, or `CrackMapExec`
+Simulate and detect lateral movement across Linux systems with **mount‑based lateral movement**, **outbound connections to internal IPs**, and tools such as **CrackMapExec**.
 
-**Log Source**: `/var/log/auth.log`, `/var/log/secure`, `audit.log`
+### 🚨 Mount‑Based Lateral Movement
 
-**Detection**: Look for internal SSH logins, transfers to uncommon hosts, and usage of remote execution tools.
+Attackers may leverage NFS, SMB, or SSHFS mounts to access or transfer files laterally.
 
+- **Detection Mechanism**: auditd rules  
+- **Log Source**: `/var/log/audit/audit.log`
+
+### 📡 Outbound Connections to Internal IPs
+
+Identify unauthorized network activity to other internal hosts (e.g., 10.0.0.0/8, 192.168.0.0/16), which can include reverse shells or frameworks like CrackMapExec.
+
+- **Detection Mechanism**: Sysmon for Linux (Event ID 3 – Network Connection)  
+- **Log Source**: Sysmon logs ( `/var/log/sysmon/sysmon.log` )
+- 
 ---
 
 ### 🧪 Suspicious File Downloads & Execution
