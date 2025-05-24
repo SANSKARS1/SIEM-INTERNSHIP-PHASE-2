@@ -47,7 +47,7 @@ This detection aims to identify lateral movement activities by monitoring connec
 | `full_command` | `mount -t nfs 192.168.1.20:/share /mnt/nfs` |
 | `a0` to `a4`    | Components of the mount command    |
 | `host`         | `kali`                              |
-| `source_type`  | `linux_sysmon` |                   |
+| `source_type`  | `linux_audit` |                   |
 
 ---
 
