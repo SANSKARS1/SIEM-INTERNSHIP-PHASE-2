@@ -55,7 +55,7 @@ Identify unauthorized network activity to other internal hosts (e.g., 10.0.0.0/8
 
 - **Detection Mechanism**: Sysmon for Linux (Event ID 3 – Network Connection)  
 - **Log Source**: Sysmon logs ( `/var/log/sysmon/sysmon.log` )
-- 
+  
 ---
 
 ### 🧪 Suspicious File Downloads & Execution
