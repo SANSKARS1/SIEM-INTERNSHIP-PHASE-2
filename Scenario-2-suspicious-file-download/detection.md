@@ -14,7 +14,11 @@ This detection identifies commands related to suspicious downloads and subsequen
   - Kali Linux VM running Splunk Universal Forwarder  
   - Windows host with Splunk Enterprise  
   - Logs forwarded: `audit.log`, `bash_history`  
-  - Forwarding via TCP port `9997`  
+  - Forwarding via TCP port `9997`
+ 
+  - **Audit rules**:
+  -   ![9](https://github.com/user-attachments/assets/716f1749-aa60-4330-975a-94d7c8a40459)
+
 
 ---
 
