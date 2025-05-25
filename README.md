@@ -70,18 +70,6 @@ Attackers often download and execute payloads:
 
 ---
 
-### 🧠 Credential Dumping
-
-Simulate extraction of stored credentials:
-- Access to `/etc/passwd` or `/etc/shadow`
-- Use of tools like `LaZagne` for plaintext credentials
-
-**Log Source**: `auditd`, `syslog`
-
-**Detection**: Identify access to sensitive files and suspicious credential extraction tools.
-
----
-
 ### 🧭 Anomalous User Behavior
 
 Post-compromise behavior varies from normal users:
