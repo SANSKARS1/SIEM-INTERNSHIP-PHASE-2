@@ -85,10 +85,10 @@ Post-compromise behavior varies from normal users:
 ### 📡 Command and Control (C2) Beaconing
 
 Simulated C2 traffic using **Metasploit Meterpreter**:
-- Regular outbound connections (beacons)
-- Periodic use of `curl`, `wget`
+- Regular outbound connections (beacons) 
+- Periodic use of `curl`, `dig`
 
-**Log Source**: `audit.log`, `syslog`, network logs (if available)
+**Log Source**:  `syslog`(sysmon) - EventID->3
 
 **Detection**: Flag repeated access to external IPs/domains with fixed intervals.
 
