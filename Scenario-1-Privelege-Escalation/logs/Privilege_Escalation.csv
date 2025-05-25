@@ -1,0 +1,6 @@
+"_time",host,User,commands,Image,DetectionType
+"2025-05-25T17:43:00.000+0530",kali,root,"getcap -r","/usr/sbin/getcap","Privilege Escalation Command"
+"2025-05-25T17:33:00.000+0530",kali,root,"find / -type f -perm -04000 -ls","/usr/bin/find","Privilege Escalation Command"
+"2025-05-25T17:31:00.000+0530",kali,root,"sudo -l","/usr/bin/sudo","Privilege Escalation Command"
+"2025-05-25T17:28:00.000+0530",kali,root,"sudo -l","/usr/bin/sudo","Privilege Escalation Command"
+"2025-05-25T17:25:00.000+0530",kali,root,"find / -type f -perm -04000 find / -type f -perm -04000 -ls","/usr/bin/find","Privilege Escalation Command"
