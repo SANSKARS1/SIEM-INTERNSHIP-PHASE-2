@@ -1,0 +1,9 @@
+"_time",host,"event_type",type,"share_path","mount_location","file_count",duration,"file_list"
+"2025-05-27T13:28:49.840+0530",kali,"CIFS/SMB Mount",cifs,"//192.168.1.11/shared","/mnt/share",,,
+"2025-05-27T13:28:49.815+0530",kali,"Other Mount",,"/var/log/syslog",,,,
+"2025-05-27T13:28:17.043+0530",kali,"NFS Mount",nfs,"192.168.1.11:/exports","/mnt/nfs",,,
+"2025-05-27T12:59:32.000+0530",kali,"File Access Burst",,,,101,10,"/mnt/file100.txt
+/mnt/file101.txt
+/mnt/file10.txt
+/mnt/file11.txt
+/mnt/file12.txt"

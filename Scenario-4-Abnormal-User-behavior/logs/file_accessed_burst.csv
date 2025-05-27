@@ -1,0 +1,6 @@
+"_time","Log Timestamp",host,"Files Accessed","Time Window (s)","Accessed File"
+"2025-05-27T12:59:32.000+0530","Tue May 27 12:59:32 PM",kali,101,10,"/mnt/file100.txt
+/mnt/file101.txt
+/mnt/file10.txt
+/mnt/file11.txt
+/mnt/file12.txt"
