@@ -68,6 +68,7 @@ index=linux_logs sourcetype=syslog
 
 ## Alert
 **Trigger Condition**: Presence of high-confidence privilege escalation or multiple recon commands.
+![image](https://github.com/user-attachments/assets/06392bae-7eac-4625-81b6-bd97cfbe10fc)
 
 
 ## Log / Sample Event
