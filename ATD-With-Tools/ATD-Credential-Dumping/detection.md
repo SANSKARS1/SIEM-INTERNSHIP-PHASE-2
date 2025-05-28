@@ -1,4 +1,4 @@
-# 🛡️ Detection Use Case: Credential Dumping on Linux
+# 🛡 Detection Use Case: Credential Dumping on Linux
 
 ## Scenario Description
 An attacker attempts to extract credentials from a Linux system using tools such as `gcore`, `strings`, `grep`, or memory forensics utilities like Volatility. This behavior is indicative of post-exploitation activities and often aims to access credentials stored in memory or process dumps.
