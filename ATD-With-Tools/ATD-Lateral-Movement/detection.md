@@ -5,7 +5,7 @@
 Detecting attempts at lateral movement within a Linux environment by monitoring for tools and commands such as `enum4linux`, `smbclient`, `nmap` with SMB scripts, and SSH login anomalies.
 
 ## Objective
-Detect possible lateral movement through SMB enumeration, port probing, and automated SSH sessions using tools like `sshpass`.
+Detect possible lateral movement through SMB enumeration, port probing, and automated SSH sessions using tools like `sshpass` , `enum4linux` , `ansible`.
 
 ## Tools Used
 - **SIEM**: Splunk Enterprise
