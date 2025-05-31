@@ -1,0 +1,48 @@
+# Nmap 7.95 scan initiated Sat May 31 12:09:29 2025 as: /usr/lib/nmap/nmap -vvv -p 22,80 -sV -sC -Pn -A -O -oN nmap_results.txt 192.168.1.45
+Nmap scan report for 192.168.1.45
+Host is up, received arp-response (0.0012s latency).
+Scanned at 2025-05-31 12:09:36 EDT for 8s
+
+PORT   STATE SERVICE REASON         VERSION
+22/tcp open  ssh     syn-ack ttl 64 OpenSSH 8.9p1 Ubuntu 3ubuntu0.10 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   256 fc:2f:79:8e:60:9e:da:36:7f:94:55:ab:f0:c5:fc:bc (ECDSA)
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBIIrsPKEsDkxGEQC2VQQtLAhTKNihlyPrSbXZ3m0vE2uV8L+EkQ6RWWGNvDOqMDQgW5a7LCbwP5jft5RNPUGCoM=
+|   256 27:e7:61:7b:5e:e0:1c:4b:a0:b0:7a:dc:03:5b:63:73 (ED25519)
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3leGnUMQ4OD+4JJ3o6+dTC+x1CZsHDfprQCS4FgdlZ
+80/tcp open  http    syn-ack ttl 64 Apache httpd 2.4.52 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+|_http-title: Admin Portal
+|_http-server-header: Apache/2.4.52 (Ubuntu)
+MAC Address: 00:0C:29:4B:8C:5A (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 4.X|5.X
+OS CPE: cpe:/o:linux:linux_kernel:4 cpe:/o:linux:linux_kernel:5
+OS details: Linux 4.15 - 5.19, OpenWrt 21.02 (Linux 5.4)
+TCP/IP fingerprint:
+OS:SCAN(V=7.95%E=4%D=5/31%OT=22%CT=%CU=42786%PV=Y%DS=1%DC=D%G=N%M=000C29%TM
+OS:=683B29C8%P=x86_64-pc-linux-gnu)SEQ(SP=FF%GCD=1%ISR=107%TI=Z%CI=Z%II=I%T
+OS:S=A)OPS(O1=M5B4ST11NW7%O2=M5B4ST11NW7%O3=M5B4NNT11NW7%O4=M5B4ST11NW7%O5=
+OS:M5B4ST11NW7%O6=M5B4ST11)WIN(W1=FE88%W2=FE88%W3=FE88%W4=FE88%W5=FE88%W6=F
+OS:E88)ECN(R=Y%DF=Y%T=40%W=FAF0%O=M5B4NNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A
+OS:=S+%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%
+OS:Q=)T5(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=
+OS:A%A=Z%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=
+OS:Y%DF=N%T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%
+OS:T=40%CD=S)
+
+Uptime guess: 37.950 days (since Wed Apr 23 13:21:15 2025)
+Network Distance: 1 hop
+TCP Sequence Prediction: Difficulty=255 (Good luck!)
+IP ID Sequence Generation: All zeros
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   1.20 ms 192.168.1.45
+
+Read data files from: /usr/share/nmap
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sat May 31 12:09:44 2025 -- 1 IP address (1 host up) scanned in 15.36 seconds
