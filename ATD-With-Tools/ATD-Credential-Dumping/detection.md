@@ -52,6 +52,8 @@ index="linux_logs" sourcetype="syslog" host="kali"
 | sort -_time
 ```
 ## Alert
+![Screenshot 2025-05-29 190421(2)](https://github.com/user-attachments/assets/99b112bb-1e13-4296-b89c-cf1826c194c7)
+
 
 ## Log / Sample Event
 
