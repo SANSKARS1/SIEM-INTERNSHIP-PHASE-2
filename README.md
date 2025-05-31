@@ -1,16 +1,20 @@
-# SIEM-INTERNSHIP-PHASE-2
-Advanced Threat Detection & Post-Exploitation Simulation on Linux
+
+# SIEM-INTERNSHIP-PHASE-2  
+**Advanced Threat Detection & Post-Exploitation Simulation on Linux**
+
+---
 
 ## 📌 Overview
 
-This repository presents the second phase of the SIEM internship, focusing on detecting post-exploitation attacker behavior using **Splunk Enterprise**. The setup simulates real-world adversarial techniques and analyzes them through log data collected from Linux systems using **Splunk Universal Forwarder**.
+This repository presents the second phase of the SIEM internship, focusing on detecting post-exploitation attacker behavior using **Splunk Enterprise**. The setup simulates real-world adversarial techniques and analyzes them through log data collected from Linux systems using the **Splunk Universal Forwarder**.
 
-It includes realistic attacker emulation using tools such as **LinPEAS**, **CrackMapExec**, **Metasploit**, and **LaZagne** to simulate exploitation, lateral movement, and credential access.
+It includes realistic attacker emulation using tools such as **LinPEAS**, **CrackMapExec**, **Metasploit**, **LaZagne**, **Ansible**, and memory-based techniques like **gcore** and **volatility** to simulate exploitation, lateral movement, and credential access.
+
+---
 
 ## 🏗️ Architecture
 
-![mermaid-ai-diagram-2025-05-23-152514](https://github.com/user-attachments/assets/678abed8-b117-4735-9364-d7b530aadf61)
-
+![Architecture Diagram](https://github.com/user-attachments/assets/678abed8-b117-4735-9364-d7b530aadf61)
 
 The simulation covers attacker actions such as privilege escalation, lateral movement, credential dumping, C2 communication, and more, with real-time monitoring and alerting via Splunk.
 
@@ -19,119 +23,168 @@ The simulation covers attacker actions such as privilege escalation, lateral mov
 ## 🔓 Exploitation & Post-Exploitation Techniques Simulated
 
 - **Privilege Escalation** using `LinPEAS`
-- **Lateral Movement** via `SSH` and tools like `CrackMapExec`
+- **Lateral Movement** via `SSH`, `Ansible`, or `CrackMapExec`
 - **Suspicious File Downloads** using `wget`, `curl`, `ftp`, `scp`
-- **Credential Dumping** via `LaZagne`, and parsing `/etc/passwd` or `/etc/shadow`
+- **Credential Dumping** via `LaZagne`, `gcore`, `strings`, `volatility`
 - **Command and Control** using `Metasploit Meterpreter`
+- **SQL Injection & Remote Shell** via unrestricted file upload
 - **Anomalous User Behavior** detection and analysis
 
 ---
 
-### 🧍 Privilege Escalation Detection
+## 🧍 Privilege Escalation Detection
 
 Detect when an attacker attempts to elevate privileges or add users to administrative groups:
 - Use of `sudo`, `usermod`, `useradd`, `LinPEAS`, or direct editing of `/etc/passwd`
 
-**Log Source**: `/var/log/auth.log`, `/etc/passwd`, `/etc/group`, `auditd`
-
+**Log Source**: `/var/log/auth.log`, `/etc/passwd`, `/etc/group`, `auditd`  
 **Detection**: Monitor privilege modification commands and changes in group memberships.
 
 ---
 
-### 🔄 Lateral Movement Detection (Non-SSH)
+## 🧠 Credential Dumping via `gcore`, `strings`, and `volatility`
 
-Simulate and detect lateral movement across Linux systems with **mount‑based lateral movement**, **outbound connections to internal IPs**, and tools such as **CrackMapExec**.
+Simulated dumping of memory from the `sshd` or `login` process to extract in-memory credentials.
 
-### 🚨 Mount‑Based Lateral Movement
+### Tools Used
 
-Attackers may leverage NFS, SMB, or SSHFS mounts to access or transfer files laterally.
+- `gcore`: Core dump of target process
+- `strings`: Extract readable data from memory
+- `volatility`: Parse and analyze memory dump
 
-- **Detection Mechanism**: auditd rules  
-- **Log Source**: `/var/log/audit/audit.log`
+### Exploitation Flow
 
-### 📡 Outbound Connections to Internal IPs
+1. Attacker gains shell access on target Linux system  
+2. Identifies active `sshd`/`login` process:  
+   ```bash
+   ps aux | grep sshd
+   ```
+3. Dumps process memory using:  
+   ```bash
+   sudo gcore -o /tmp/ssh_mem <PID>
+   ```
+4. Extracts credentials using:  
+   ```bash
+   strings /tmp/ssh_mem.<PID> | grep -i password
+   ```
+5. Optionally exports full memory and analyzes using volatility:  
+   ```bash
+   volatility -f memory.raw --profile=Linux... linux_pslist
+   volatility -f memory.raw --profile=Linux... linux_bash
+   ```
 
-Identify unauthorized network activity to other internal hosts (e.g., 10.0.0.0/8, 192.168.0.0/16), which can include reverse shells or frameworks like CrackMapExec.
+### Detection & Logging
 
-- **Detection Mechanism**: Sysmon for Linux (Event ID 3 – Network Connection)  
-- **Log Source**: Sysmon logs ( `/var/log/sysmon/sysmon.log` )
-  
----
+- `auditd` for syscall logging: capture `ptrace`, `gcore`, or `core_pattern` activity  
+- `syslog`: Commands run by attacker (`gcore`, `strings`)  
+- `bash_history`: Reverse shell or manual command history  
 
-### 🧪 Suspicious File Downloads & Execution
+**Log Sources**:
+- `/var/log/audit/audit.log`  
+- `/var/log/syslog`  
+- `/home/*/.bash_history`  
 
-Attackers often download and execute payloads:
-- Download using `wget`, `curl`, `ftp`, `scp`
-- Execute with `bash`, `chmod`, or `./`
+### Recommendations
 
-**Log Source**: `auditd`, `syslog`, `bash_history`
-
-**Detection**: Correlate file downloads to executions, and flag use of temp directories or uncommon extensions (`.sh`, `.py`, `.elf`).
-
----
-
-### 🧭 Anomalous User Behavior
-
-Post-compromise behavior varies from normal users:
-- Off-hour logins, burst activity
-- Accessing sensitive directories or copying large files
-
-**Log Source**: `/var/log/auth.log`, `audit.log`, `syslog`
-
-**Detection**: Use behavior analytics to identify anomalies in user actions and patterns.
-
----
-
-### 📡 Command and Control (C2) Beaconing
-
-Simulated C2 traffic using **Metasploit Meterpreter**:
-- Regular outbound connections (beacons) 
-- Periodic use of `curl`, `dig`
-
-**Log Source**:  `syslog`(sysmon) - EventID->3
-
-**Detection**: Flag repeated access to external IPs/domains with fixed intervals.
-
----
-
-### 🗂️ Log Sources for Detection
-
-The following Linux logs are monitored:
-- `/var/log/auth.log`
-- `/var/log/audit/audit.log`
-- `/var/log/syslog`
-- `/home/*/.bash_history`
-- `/etc/passwd`, `/etc/group`, `/etc/shadow`
-
-These are forwarded using the **Splunk Universal Forwarder** to **Splunk Enterprise**.
+- Disable unnecessary debugging tools (`gcore`, `gdb`) on production systems  
+- Enable `core dump` restrictions via:  
+  ```bash
+  echo "fs.suid_dumpable = 0" >> /etc/sysctl.conf
+  sysctl -p
+  ```
+- Monitor for suspicious access to processes with `ptrace`, `gcore`, or access to `/proc/<pid>/mem`  
+- Use `auditd` to alert on suspicious memory access patterns  
 
 ---
 
-### 🖥️ Splunk Universal Forwarder + Post-Exploitation Integration
+## 🔄 Lateral Movement Detection (Ansible, SSH, etc.)
 
-To enable detection:
+Simulate and detect lateral movement across Linux systems:
 
-- **Configured log sources**:
-  - `/var/log/auth.log`
-  - `/var/log/audit/audit.log`
-  - `/var/log/syslog`
-  - `/home/*/.bash_history`
-  - `/etc/passwd`, `/etc/group`, `/etc/shadow`
+- **Mount‑Based Lateral Movement** using `NFS`, `SMB`, `SSHFS`  
+- **Outbound Connections to Internal IPs**  
+- **Automated Lateral Movement via Ansible**
 
-- **Forwarder Configuration Files**:
-  - `inputs.conf`: paths to monitor
-  - `outputs.conf`: forwards to indexer (TCP 9997)
+### Detection Mechanisms
 
-- **Index**: Logs indexed under `postexploitation_logs` with sourcetypes such as `auth`, `syslog`, `auditd`, `bash`
+- `auditd` for mounts  
+- `sysmon` for outbound connections  
+- `auth.log` for SSH keys, Ansible temp file execution  
 
 ---
 
-These detections align with MITRE ATT&CK tactics:
-- **Privilege Escalation**
-- **Lateral Movement**
-- **Credential Access**
-- **Execution**
-- **Command and Control**
-- **Defense Evasion**
+## 🧪 Suspicious File Downloads & Execution
 
-This setup enhances visibility into post-compromise activity on Linux endpoints using Splunk as the central detection engine.
+Detect payload downloads and execution patterns:
+
+- Download via `wget`, `curl`, `scp`  
+- Execution using `bash`, `chmod`, `./payload`  
+
+**Log Source**: `auditd`, `syslog`, `bash_history`  
+
+---
+
+## 📡 C2 Beaconing Detection
+
+Monitor for reverse shell or beacon traffic (Metasploit, netcat, curl beaconing):
+
+- Use `Sysmon` for network events  
+- Flag repeated or timed connections  
+
+---
+
+## 🧨  Exploitation on Linux Server: SQL Injection + File Upload + Remote Shell
+
+Full flow of web attack using `sqlmap`, `admin panel upload`, and `netcat` reverse shell:
+
+- Detect anomalous upload activity  
+- Monitor `/admin/upload/*.php` execution  
+- Trace outbound connection from web server  
+
+---
+
+## 🗂️ Log Sources for Detection
+
+- `/var/log/auth.log`  
+- `/var/log/audit/audit.log`  
+- `/var/log/syslog`  
+- `/home/*/.bash_history`  
+- `/etc/passwd`, `/etc/group`, `/etc/shadow`  
+
+---
+
+## 🖥️ Splunk Universal Forwarder Setup
+
+- `inputs.conf` for path monitoring  
+- `outputs.conf` for forwarding logs to indexer  
+- Logs indexed under `postexploitation_logs`  
+
+---
+
+## 🧬 MITRE ATT&CK Mapping
+
+| Tactic               | Technique Example                      |
+|----------------------|----------------------------------------|
+| Initial Access        | Web shell via file upload             |
+| Execution             | Bash scripts, memory dumps            |
+| Privilege Escalation  | sudo abuse, /etc/passwd edit          |
+| Credential Access     | `LaZagne`, `gcore`, `/etc/shadow`     |
+| Lateral Movement      | SSH, mount, Ansible, CrackMapExec     |
+| Command and Control   | Metasploit beacon, netcat reverse     |
+| Defense Evasion       | Use of common tools in stealth mode   |
+
+---
+
+## 📖 References
+
+- MITRE ATT&CK: https://attack.mitre.org/  
+- Sysmon for Linux: https://github.com/Sysinternals/SysmonForLinux  
+- Auditd Rules: https://github.com/Neo23x0/auditd  
+- Volatility: https://github.com/volatilityfoundation/volatility  
+- LaZagne: https://github.com/AlessandroZ/LaZagne  
+
+---
+
+## ✅ Outcome
+
+This simulation enhances visibility into post-compromise attacker behaviors on Linux systems using Splunk as the central detection engine. It offers practical detection logic, real attacker emulation, and log collection to support SOC analysis and threat hunting.
