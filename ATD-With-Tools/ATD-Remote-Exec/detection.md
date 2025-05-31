@@ -99,6 +99,8 @@ index=linux_logs sourcetype=linux_audit (key="cron_mod" OR key="systemd_mod")
 | rename _time AS "Time", exe AS "Executable", command_line AS "Command Line", event_type AS "Event Type", description AS "Description"
 ```
 ## Alert
+![Screenshot 2025-05-29 190421(1)](https://github.com/user-attachments/assets/f602e39d-c1f8-4f7c-801a-0ee63a7cf428)
+
 ---
 ## Log / Sample Event
 ## Suspicious Activity and File Modifications
